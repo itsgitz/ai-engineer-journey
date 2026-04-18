@@ -1,9 +1,10 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
-import { createRoot } from "react-dom/client";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-function Chat() {
+export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -78,5 +79,3 @@ function Chat() {
     </>
   );
 }
-
-createRoot(document.body).render(<Chat />);
