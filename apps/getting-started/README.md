@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Phase 0: AI Chat App
 
-## Getting Started
+A full-stack AI chat application built with Next.js 16, Vercel AI SDK v5, and Bun. Supports local inference (Ollama) and cloud providers (OpenAI).
 
-First, run the development server:
+## Quick Start
+
+### Prerequisites
+- Bun installed
+- (Optional) Ollama running locally for `llama3.2` or another model
+
+### Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+bun install
+
+# Copy and configure environment
+cp .env.example .env.local
+# Edit .env.local:
+# - AI_PROVIDER=ollama (default) or openai
+# - OLLAMA_MODEL=llama3.2 (if using Ollama)
+# - OPENAI_API_KEY=sk-... (if using OpenAI)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Web UI:**
+```bash
+bun run dev
+# Open http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**CLI:**
+```bash
+bun src/cli.ts "What is AI?"
+```
 
-## Learn More
+## Architecture
 
-To learn more about Next.js, take a look at the following resources:
+| Component | File | Purpose |
+|-----------|------|---------|
+| Provider Factory | `lib/provider.ts` | Switches between Ollama / OpenAI |
+| API Route | `app/api/chat/route.ts` | POST /api/chat → streaming text |
+| Web UI | `app/page.tsx` | React chat component with streaming |
+| CLI | `src/cli.ts` | Command-line interface |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Testing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Run all tests
+bun test
 
-## Deploy on Vercel
+# Watch mode
+bun test --watch
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Specific file
+bun test __tests__/provider.test.ts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All code written test-first (TDD). 9 tests covering provider factory, API validation, and smoke tests.
+
+## Environment Variables
+
+| Variable | Default | Example |
+|----------|---------|---------|
+| `AI_PROVIDER` | `ollama` | `openai` |
+| `OLLAMA_MODEL` | `llama3.2` | `mistral`, `neural-chat` |
+| `OPENAI_API_KEY` | — | `sk-proj-...` |
+| `OPENAI_MODEL` | `gpt-4o-mini` | `gpt-4` |
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **AI SDK:** Vercel AI SDK v5
+- **Providers:** `ollama-ai-provider-v2`, `@ai-sdk/openai`
+- **Runtime:** Bun (package manager + test runner)
+- **Styling:** Tailwind v4 + custom CSS
+- **Validation:** Zod
+
+## Development
+
+### Type Checking
+```bash
+bunx tsc --noEmit
+```
+
+### Linting
+```bash
+bunx eslint . --fix
+```
+
+### Building
+```bash
+bun run build
+bun run start
+```
+
+## Troubleshooting
+
+**"model not found" error:**
+- Ensure Ollama is running: `ollama serve`
+- Pull model: `ollama pull llama3.2`
+
+**API 400 errors:**
+- Check request body has `messages` array
+- Each message needs `{ role: "user" | "assistant", content: string }`
+
+**Dev server won't start:**
+- Kill existing process: `lsof -ti:3000 | xargs kill -9`
+- Clear `.next`: `rm -rf .next && bun run dev`
