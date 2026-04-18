@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-type Message = { role: "user" | "assistant"; content: string };
+type Message = { id: string; role: "user" | "assistant"; content: string };
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -19,7 +19,7 @@ export default function ChatPage() {
     const text = input.trim();
     if (!text || loading) return;
 
-    const next: Message[] = [...messages, { role: "user", content: text }];
+    const next: Message[] = [...messages, { id: crypto.randomUUID(), role: "user", content: text }];
     setMessages(next);
     setInput("");
     setLoading(true);
@@ -31,7 +31,7 @@ export default function ChatPage() {
     });
 
     if (!res.ok || !res.body) {
-      setMessages([...next, { role: "assistant", content: "[error]" }]);
+      setMessages([...next, { id: crypto.randomUUID(), role: "assistant", content: "[error]" }]);
       setLoading(false);
       return;
     }
@@ -39,13 +39,14 @@ export default function ChatPage() {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let reply = "";
-    setMessages([...next, { role: "assistant", content: "" }]);
+    const assistantId = crypto.randomUUID();
+    setMessages([...next, { id: assistantId, role: "assistant", content: "" }]);
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       reply += decoder.decode(value, { stream: true });
-      setMessages([...next, { role: "assistant", content: reply }]);
+      setMessages([...next, { id: assistantId, role: "assistant", content: reply }]);
     }
     setLoading(false);
   }
@@ -53,8 +54,8 @@ export default function ChatPage() {
   return (
     <>
       <div id="chat" ref={chatRef}>
-        {messages.map((m, i) => (
-          <div key={i} className={`msg ${m.role}`}>
+        {messages.map((m) => (
+          <div key={m.id} className={`msg ${m.role}`}>
             {m.content}
           </div>
         ))}

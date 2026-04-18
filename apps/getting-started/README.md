@@ -30,7 +30,7 @@ bun apps/getting-started/src/cli.ts "explain RAG in 2 sentences"
 ### HTTP server (browser chat UI)
 
 ```bash
-bun --hot apps/getting-started/src/server.ts
+bun run dev   # from apps/getting-started/
 # open http://localhost:3000
 ```
 
@@ -88,9 +88,8 @@ Add `performance.now()` timestamps before and after the first `chunk` arrives. W
 
 | File | Purpose |
 |------|---------|
-| `src/provider.ts` | Env-switched model factory (ollama default, openai via `AI_PROVIDER=openai`) |
+| `lib/provider.ts` | Env-switched model factory (ollama default, openai via `AI_PROVIDER=openai`) |
 | `src/cli.ts` | Terminal streaming via `streamText` |
-| `src/server.ts` | `Bun.serve()` with `/api/chat` SSE endpoint |
-| `index.html` + `src/frontend.tsx` | Browser chat UI (React, HTML imports) |
+| `app/page.tsx` | Browser chat UI (React, App Router) |
+| `app/api/chat/route.ts` | Next.js API route with streaming |
 | `src/provider.test.ts` | Unit tests for provider factory |
-| `src/server.test.ts` | Integration tests for HTTP endpoints |
