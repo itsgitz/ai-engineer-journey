@@ -7,12 +7,14 @@ This is an AI Engineering learning monorepo. 10 phases, each under `apps/<phase>
 
 **Stack:** Vercel AI SDK v5 (`ai` + `@ai-sdk/*`), Ollama local inference (`ollama-ai-provider-v2`), Bun workspaces. Ollama is the default provider; `AI_PROVIDER=openai` switches to OpenAI.
 
+**Fullstack Framework:** Use **Next.js** (App Router) for all fullstack applications. Do NOT use `Bun.serve()` for web apps — Next.js handles routing, API routes, and server components. Bun is still used as the package manager and test runner.
+
 **Run Phase 0:**
 ```bash
 ollama serve && ollama pull llama3.2
-bun apps/getting-started/src/cli.ts "your prompt"   # CLI
-bun --hot apps/getting-started/src/server.ts         # browser at :3000
-bun test                                              # 7 tests (streaming skips without Ollama)
+bun src/cli.ts "your prompt"               # CLI (from apps/getting-started/)
+bun run dev                                 # Next.js dev server at :3000
+bun test                                    # tests (streaming skips without Ollama)
 ```
 
 ---
