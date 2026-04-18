@@ -1,95 +1,36 @@
-# Phase 0 — Getting Started
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Proves the full loop: **Bun → Vercel AI SDK v5 → Ollama → streamed tokens** in the terminal and browser.
+## Getting Started
 
-## Prerequisites
-
-1. **Ollama** installed and running: https://ollama.com
-2. Pull the default model:
-   ```bash
-   ollama pull llama3.2
-   ollama serve   # keep this running in a separate terminal
-   ```
-
-## Install
-
-From the repo root:
+First, run the development server:
 
 ```bash
-bun install
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Usage
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### CLI (terminal streaming)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-bun apps/getting-started/src/cli.ts "explain RAG in 2 sentences"
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### HTTP server (browser chat UI)
+## Learn More
 
-```bash
-bun run dev   # from apps/getting-started/
-# open http://localhost:3000
-```
+To learn more about Next.js, take a look at the following resources:
 
-### Swap provider (OpenAI)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-```bash
-AI_PROVIDER=openai OPENAI_API_KEY=sk-... bun apps/getting-started/src/cli.ts "explain RAG in 2 sentences"
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Set `OLLAMA_MODEL` or `OPENAI_MODEL` env vars to change the model.
+## Deploy on Vercel
 
-## Tests
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-```bash
-bun test   # from apps/getting-started/
-```
-
-> The streaming integration test auto-skips when Ollama isn't running.
-
----
-
-## Exercises
-
-Work through these before moving to Phase 1. Write your answers in `docs/01-getting-started.md`.
-
-### 1. Three prompts
-
-Send these three prompts and observe the output quality and latency:
-
-- `"What is a transformer architecture? Answer in 3 bullet points."`
-- `"Write a haiku about vector databases."`
-- `"What's the difference between RAG and fine-tuning? One sentence each."`
-
-### 2. Temperature tweak
-
-Edit `src/provider.ts` to add a `temperature` option (start at `0.2`, try `1.0`). Run the same prompt twice at each setting. What changes?
-
-### 3. Provider swap
-
-Run one prompt against Ollama (`llama3.2`) and the same prompt with `AI_PROVIDER=openai` (requires `OPENAI_API_KEY`). Compare quality and first-token latency.
-
-### 4. Measure first-token latency
-
-Time the CLI:
-
-```bash
-time bun src/cli.ts "hello"
-```
-
-Add `performance.now()` timestamps before and after the first `chunk` arrives. What's the first-token latency locally vs hosted?
-
----
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `lib/provider.ts` | Env-switched model factory (ollama default, openai via `AI_PROVIDER=openai`) |
-| `src/cli.ts` | Terminal streaming via `streamText` |
-| `app/page.tsx` | Browser chat UI (React, App Router) |
-| `app/api/chat/route.ts` | Next.js API route with streaming |
-| `src/provider.test.ts` | Unit tests for provider factory |
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

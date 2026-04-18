@@ -7,6 +7,5 @@ export function getModel(): LanguageModel {
     return openai(process.env.OPENAI_MODEL ?? "gpt-4o-mini") as unknown as LanguageModel;
   }
   const ollama = createOllama();
-  // ollama-ai-provider-v2 implements LanguageModelV1; cast to satisfy ai@5 types
   return ollama(process.env.OLLAMA_MODEL ?? "llama3.2") as unknown as LanguageModel;
 }
