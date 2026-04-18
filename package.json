@@ -1,8 +1,8 @@
 {
   "name": "ai-engineer-journey",
-  "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": ["apps/*", "libs/*"],
   "devDependencies": {
     "@types/bun": "latest"
   },
