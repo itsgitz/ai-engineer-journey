@@ -1,4 +1,22 @@
 
+## Project Context
+
+This is an AI Engineering learning monorepo. 10 phases, each under `apps/<phase>/`. Shared primitives go in `libs/`. Learning notes in `docs/`.
+
+**Current state:** Phase 0 complete (`apps/getting-started/`). Phases 1–9 are stubs.
+
+**Stack:** Vercel AI SDK v5 (`ai` + `@ai-sdk/*`), Ollama local inference (`ollama-ai-provider-v2`), Bun workspaces. Ollama is the default provider; `AI_PROVIDER=openai` switches to OpenAI.
+
+**Run Phase 0:**
+```bash
+ollama serve && ollama pull llama3.2
+bun apps/getting-started/src/cli.ts "your prompt"   # CLI
+bun --hot apps/getting-started/src/server.ts         # browser at :3000
+bun test                                              # 7 tests (streaming skips without Ollama)
+```
+
+---
+
 Default to using Bun instead of Node.js.
 
 - Use `bun <file>` instead of `node <file>` or `ts-node <file>`
