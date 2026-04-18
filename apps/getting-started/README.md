@@ -6,7 +6,10 @@ A full-stack AI chat application built with Next.js 16, Vercel AI SDK v5, and Bu
 
 ### Prerequisites
 - Bun installed
-- (Optional) Ollama running locally for `llama3.2` or another model
+- (Optional) Ollama for local inference:
+  1. Install Ollama from https://ollama.com
+  2. Start the server: `ollama serve`
+  3. Pull the model: `ollama pull llama3.2`
 
 ### Setup
 
