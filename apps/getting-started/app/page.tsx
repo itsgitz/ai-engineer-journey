@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { generateId } from "ai";
 
 type Message = { id: string; role: "user" | "assistant"; content: string };
 
@@ -19,7 +20,7 @@ export default function ChatPage() {
     const text = input.trim();
     if (!text || loading) return;
 
-    const next: Message[] = [...messages, { id: crypto.randomUUID(), role: "user", content: text }];
+    const next: Message[] = [...messages, { id: generateId(), role: "user", content: text }];
     setMessages(next);
     setInput("");
     setLoading(true);
@@ -31,7 +32,7 @@ export default function ChatPage() {
     });
 
     if (!res.ok || !res.body) {
-      setMessages([...next, { id: crypto.randomUUID(), role: "assistant", content: "[error]" }]);
+      setMessages([...next, { id: generateId(), role: "assistant", content: "[error]" }]);
       setLoading(false);
       return;
     }
@@ -39,7 +40,7 @@ export default function ChatPage() {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let reply = "";
-    const assistantId = crypto.randomUUID();
+    const assistantId = generateId();
     setMessages([...next, { id: assistantId, role: "assistant", content: "" }]);
 
     while (true) {
