@@ -1,5 +1,5 @@
 import { streamText } from "ai";
-import { getModel } from "./provider";
+import { getModel } from "../lib/provider";
 
 const prompt = process.argv.slice(2).join(" ").trim();
 if (!prompt) {
